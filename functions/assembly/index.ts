@@ -51,8 +51,8 @@ export function getEmojiFromString(text: string): string {
 // see examples/textgeneration for explanation
 function generateListForEmoji(text: string): string[] {
   // Prompt trick: ask for a simple JSON object.
-  const instruction = `Write the emoji. It must precisely follow the sample. Only respond with valid JSON object containing a valid JSON array named 'list', in this format:
-  {"list":["😭: sobbing face", "🍎: red apple"]}
+  const instruction = `Write the emoji description. It must precisely follow the sample. Only respond with valid JSON object containing a valid JSON array named 'list', in this format:
+  {"list":["sobbing face", "red apple"]}
   `;
 
   const model = models.getModel<OpenAIChatModel>(generationModelName);
@@ -75,20 +75,27 @@ function generateListForEmoji(text: string): string[] {
 export function upsertAllStarterEmojis(): string {
   const generateBatchSize: i32 = 10;
   const upsertBatchSize: i32 = 50;
-  let emojiList: string[] = [];
+  let emojiDescriptionList: string[] = [];
 
   // Generate emoji descriptions in batches of 10
   for (let i: i32 = 0; i < starterEmojis.length; i += generateBatchSize) {
     const end: i32 = min(i + generateBatchSize, starterEmojis.length);
     const batch: string[] = starterEmojis.slice(i, end);
-    emojiList = emojiList.concat(generateListForEmoji(batch.join(", ")));
+    emojiDescriptionList = emojiDescriptionList.concat(
+      generateListForEmoji(batch.join(", ")),
+    );
   }
 
   // Upsert emojis in batches of 50
-  for (let i: i32 = 0; i < emojiList.length; i += upsertBatchSize) {
-    const end: i32 = min(i + upsertBatchSize, emojiList.length);
-    const batch: string[] = emojiList.slice(i, end);
-    const response = collections.upsertBatch(emojis, null, batch);
+  for (let i: i32 = 0; i < emojiDescriptionList.length; i += upsertBatchSize) {
+    const end: i32 = min(i + upsertBatchSize, emojiDescriptionList.length);
+    const descriptionBatch: string[] = emojiDescriptionList.slice(i, end);
+    const emojiBatch: string[] = starterEmojis.slice(i, end);
+    const response = collections.upsertBatch(
+      emojis,
+      emojiBatch,
+      descriptionBatch,
+    );
     if (!response.isSuccessful) {
       return response.error;
     }
@@ -113,49 +120,20 @@ function generateText(instruction: string, prompt: string): string {
   return output.choices[0].message.content.trim();
 }
 
-export function insertEmoji(emoji: string): string {
-  // check if emoji already exists
-  const texts = collections.getTexts(emojis).values();
-  for (let i: i32 = 0; i < texts.length; i++) {
-    const textEmoji = getEmojiFromString(texts[i]);
-    if (textEmoji === emoji) {
-      return "Emoji already exists";
-    }
-  }
-  const emojitext = generateText(
+export function upsertEmoji(emoji: string): string {
+  const emojiDescription = generateText(
     "generate a concise one sentence description for the emoji sent",
     emoji,
   );
-  const upsertString = emoji + " " + emojitext;
-  const response = collections.upsert(emojis, null, upsertString);
+  const response = collections.upsert(emojis, emoji, emojiDescription);
   if (!response.isSuccessful) {
     throw new Error(response.error);
   }
   return response.status;
 }
 
-export function updateEmoji(
-  key: string,
-  emoji: string,
-  emojiText: string,
-): string {
-  const text = collections.getText(emojis, key);
-  const textEmoji = getEmojiFromString(text);
-  if (textEmoji !== emoji) {
-    return "Emoji does not match";
-  }
-
-  const upsertString = emoji + ": " + emojiText;
-  const response = collections.upsert(emojis, key, upsertString);
-  if (!response.isSuccessful) {
-    throw new Error(response.error);
-  }
-  return response.status;
-}
-
-export function getEmoji(key: string): string {
-  const text = collections.getText(emojis, key);
-  return getEmojiFromString(text);
+export function getEmojiDescription(emoji: string): string {
+  return collections.getText(emojis, emoji);
 }
 
 export function findMatchingEmoji(
