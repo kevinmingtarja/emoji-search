@@ -86,11 +86,17 @@ export function upsertAllStarterEmojis(): string {
     );
   }
 
+  const emojisList: string[] = [];
+  for (let i: i32 = 0; i < emojiDescriptionList.length; i++) {
+    const description = emojiDescriptionList[i];
+    emojisList.push(getEmojiFromString(description));
+  }
+
   // Upsert emojis in batches of 50
   for (let i: i32 = 0; i < emojiDescriptionList.length; i += upsertBatchSize) {
     const end: i32 = min(i + upsertBatchSize, emojiDescriptionList.length);
     const descriptionBatch: string[] = emojiDescriptionList.slice(i, end);
-    const emojiBatch: string[] = starterEmojis.slice(i, end);
+    const emojiBatch: string[] = emojisList.slice(i, end);
     const response = collections.upsertBatch(
       emojis,
       emojiBatch,
