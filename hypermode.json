@@ -28,17 +28,7 @@
   },
   "collections": {
     "emojis": {
-      "searchMethods": {
-        "searchMethod1": {
-          "embedder": "miniLMEmbed",
-          "index": {
-            "type": "sequential"
-          }
-        },
-        "searchMethod2": {
-          "embedder": "miniLMEmbed"
-        }
-      }
+      "searchMethods": {}
     }
   }
 }
