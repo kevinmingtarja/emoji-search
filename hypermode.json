@@ -28,7 +28,11 @@
   },
   "collections": {
     "emojis": {
-      "searchMethods": {}
+      "searchMethods": {
+        "searchMethod1": {
+          "embedder": "miniLMEmbed"
+        }
+      }
     }
   }
 }
