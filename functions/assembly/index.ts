@@ -90,6 +90,10 @@ export function upsertAllStarterEmojis(): string {
   for (let i: i32 = 0; i < emojiDescriptionList.length; i++) {
     const description = emojiDescriptionList[i];
     emojisList.push(getEmojiFromString(description));
+    const colonIndex = description.indexOf(":");
+    if (colonIndex !== -1) {
+      emojiDescriptionList[i] = description.substring(colonIndex + 1).trim();
+    }
   }
 
   // Upsert emojis in batches of 50
