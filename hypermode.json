@@ -26,13 +26,5 @@
       }
     }
   },
-  "collections": {
-    "emojis": {
-      "searchMethods": {
-        "searchMethod1": {
-          "embedder": "miniLMEmbed"
-        }
-      }
-    }
-  }
+  "collections": {}
 }
