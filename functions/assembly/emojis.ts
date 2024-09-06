@@ -146,7 +146,6 @@ export const starterEmojis: string[] = [
   "🎁",
   "🎂",
   "🎃",
-  "🎄",
   "🎅",
   "🎆",
   "🎇",
