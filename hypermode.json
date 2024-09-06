@@ -1,11 +1,6 @@
 {
   "$schema": "https://manifest.hypermode.com/hypermode.json",
   "models": {
-    "embeddings": {
-      "sourceModel": "text-embedding-3-large",
-      "host": "openai",
-      "path": "v1/embeddings"
-    },
     "minilm": {
       "sourceModel": "sentence-transformers/all-MiniLM-L6-v2",
       "provider": "hugging-face",
@@ -18,14 +13,7 @@
     }
   },
 
-  "hosts": {
-    "openai": {
-      "baseUrl": "https://api.openai.com/",
-      "headers": {
-        "Authorization": "Bearer {{API_KEY}}"
-      }
-    }
-  },
+  "hosts": {},
   "collections": {
     "emojis": {
       "searchMethods": {

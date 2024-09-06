@@ -1,7 +1,6 @@
 import { collections } from "@hypermode/functions-as";
 import { starterEmojis } from "./emojis";
 import { models } from "@hypermode/functions-as";
-import { OpenAIEmbeddingsModel } from "@hypermode/models-as/models/openai/embeddings";
 import { EmbeddingsModel } from "@hypermode/models-as/models/experimental/embeddings";
 
 import {
@@ -13,19 +12,10 @@ import {
 import { JSON } from "json-as";
 
 // These names should match the ones defined in the hypermode.json manifest file.
-const openAImbeddingModelName: string = "embeddings";
 const miniLMEmbeddingsModelName: string = "minilm";
 const generationModelName: string = "text-generator";
 const emojis: string = "emojis";
 const searchMethod: string = "searchMethod1";
-
-// This function takes input text and returns the vector embedding for that text.
-export function openAIEmbed(text: string[]): f32[][] {
-  const model = models.getModel<OpenAIEmbeddingsModel>(openAImbeddingModelName);
-  const input = model.createInput(text);
-  const output = model.invoke(input);
-  return output.data.map<f32[]>((d) => d.embedding);
-}
 
 export function miniLMEmbed(text: string[]): f32[][] {
   const model = models.getModel<EmbeddingsModel>(miniLMEmbeddingsModelName);
