@@ -1,14 +1,14 @@
-import { collections } from "@hypermode/functions-as";
+import { collections } from "@hypermode/modus-sdk-as";
 import { starterEmojis } from "./emojis";
-import { models } from "@hypermode/functions-as";
-import { EmbeddingsModel } from "@hypermode/models-as/models/experimental/embeddings";
+import { models } from "@hypermode/modus-sdk-as";
+import { EmbeddingsModel } from "@hypermode/modus-sdk-as/models/experimental/embeddings";
 
 import {
   OpenAIChatModel,
   ResponseFormat,
   SystemMessage,
   UserMessage,
-} from "@hypermode/models-as/models/openai/chat";
+} from "@hypermode/modus-sdk-as/models/openai/chat";
 import { JSON } from "json-as";
 
 // These names should match the ones defined in the hypermode.json manifest file.
