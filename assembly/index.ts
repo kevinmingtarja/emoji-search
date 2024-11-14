@@ -41,7 +41,7 @@ export function getEmojiFromString(text: string): string {
 // see examples/textgeneration for explanation
 function generateListForEmoji(text: string): string[] {
   // Prompt trick: ask for a simple JSON object.
-  const instruction = `Write the emoji. Use very complicated words. It must precisely follow the sample. Only respond with valid JSON object containing a valid JSON array named 'list', in this format:
+  const instruction = `Write the emoji. Use very complicated words and be very verbose. It must precisely follow the sample. Only respond with valid JSON object containing a valid JSON array named 'list', in this format:
   {"list":["😭: sobbing face", "🍎: red apple"]}`;
 
   const model = models.getModel<OpenAIChatModel>(generationModelName);
